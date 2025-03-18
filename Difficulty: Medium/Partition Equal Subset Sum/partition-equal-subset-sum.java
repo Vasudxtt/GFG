@@ -31,30 +31,25 @@ class GFG {
 
 
 class Solution {
+    static boolean f(int ind, int tar, int arr[], Boolean dp[][]){
+        if(ind<0)return false;
+        if(tar==0)return true;
+        
+        if(dp[ind][tar]!=null)return dp[ind][tar];
+        
+        boolean nt=f(ind-1, tar, arr, dp);
+        boolean t=false;
+        if(tar-arr[ind]>=0)t=f(ind-1, tar-arr[ind], arr, dp);
+        return dp[ind][tar]=nt|| t;
+    }
+    
     static boolean equalPartition(int arr[]) {
-        // code here
-        int sum = 0; 
-        for (int num : arr) {
-            sum += num;
-        }
-        if (sum % 2 != 0)
-            return false;
-        sum = sum / 2;
-        int n = arr.length;
-        boolean[] prev = new boolean[sum + 1];
-        boolean[] curr = new boolean[sum + 1];
-        prev[0] = true;
-        for (int i = 1; i <= n; i++) {
-            for (int j = 0; j <= sum; j++) {
-                if (j < arr[i - 1])
-                    curr[j] = prev[j];
-                else
-                    curr[j] = (prev[j] || prev[j - arr[i - 1]]);
-            }
-            for (int j=0; j<=sum; j++) {
-                prev[j] = curr[j];
-            }
-        }
-        return prev[sum];
+        int sum=0;
+        for(int a: arr)sum+=a;
+        if(sum%2!=0)return false;
+        int target=sum/2;
+        Boolean dp[][]=new Boolean[arr.length][target+1];
+        return f(arr.length-1, target, arr, dp);
+        
     }
 }
